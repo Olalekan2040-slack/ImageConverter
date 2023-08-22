@@ -20,7 +20,11 @@ def convert_image():
 
     text = pytesseract.image_to_string(img)
 
-    return render_template('index.html', text=text)
+    if text.strip():  # Check if the extracted text is not empty
+        return render_template('index.html', text=text)
+    
+    else:
+        return render_template('index.html', no_text=True)
 
 if __name__ == '__main__':
     app.run(debug=True)

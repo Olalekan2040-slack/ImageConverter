@@ -2,18 +2,45 @@
 <html>
 <head>
     <title>Image to Text Converter</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="../static/" rel="stylesheet">
 </head>
 <body>
-    <h1>Image to Text Converter</h1>
-    <form method="post" action="/convert" enctype="multipart/form-data">
-        <input type="file" name="image" accept="image/*" required>
-        <button type="submit">Convert</button>
-    </form>
+    <section class="header">
+        <img class="logo" alt="logo" src="../static/img/qtechwhite.png">
+
+        <div class="hero">
+            <h1>Image to</h1> <h1>Text Converter</h1>
+            <p>We present an online OCR (optical character recognition) 
+            service to extract text from an image.</p> 
+            <p>Upload a photo to our image to text converter, click on submit, and get your text file instantly.</p>
+        </div>
+    </section>
+    <br>
+    <section class="upload">
+        <form method="post" action="/convert" enctype="multipart/form-data">
+            <div class="form-content">
+                <div id="dimg" class="drop-zone">
+                    <h3>Upload Your Images here</h3>
+                    <p>Up to 60 images at once</p>
+                    <input type="file" name="image" accept="image/*">
+                </div>
+                <div id="preview"></div>
+                <br>
+                <label class="upload-button">
+                    <input type="file" id="fileInput" name="image" accept="image/*" style="display: none;">
+                </label>
+                <br><br><br>
+                <button type="submit">Convert</button>
+            </div>
+        </form>
+    </section>
     <div id="result">
         {% if text %}
-        <h2>Extracted Texts:</h2>
-        <pre>{{ text }}</pre>
+            <h2>Extracted Texts:</h2>
+            <pre>{{ text }}</pre>
+        {% elif no_text %}
+            <h2>No text detected in the image.</h2>
         {% endif %}
     </div>
 </body>
