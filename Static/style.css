@@ -21,7 +21,7 @@ h1 {
     float: left;
     width: 100px;
     height: 10vh;
-    margin: 10px;
+    margin: 20px;
 }
 .header{
     justify-content: center;
@@ -97,6 +97,8 @@ button:hover{
     background-color: #f0f0f0;
 }
 
+/* ... (other styles) ... */
+
 #result {
     margin-top: 20px;
     border: 1px solid #ddd;
@@ -104,4 +106,9 @@ button:hover{
     padding: 10px;
     background-color: #fff;
     text-decoration-color: chocolate;
-} 
+    white-space: pre-wrap; /* Add this line */
+}
+
+
+
+/* ... (other styles) ... */

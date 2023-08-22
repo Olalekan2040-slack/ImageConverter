@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import pytesseract
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import io
 
 app = Flask(__name__)
@@ -10,21 +10,25 @@ def index():
     return render_template('index.html')
 
 @app.route('/convert', methods=['POST'])
-def convert_image():
-    if 'image' not in request.files:
-        return render_template('index.html', error='No image provided')
+def convert_images():
+    images = request.files.getlist('images')
 
-    image = request.files['image']
-    image_data = image.read()
-    img = Image.open(io.BytesIO(image_data))
+    if not images:
+        return render_template('index.html', error='No images provided')
 
-    text = pytesseract.image_to_string(img)
+    texts = []
 
-    if text.strip():  # Check if the extracted text is not empty
-        return render_template('index.html', text=text)
-    
-    else:
-        return render_template('index.html', no_text=True)
+    for image in images:
+        try:
+            image_data = image.read()
+            img = Image.open(io.BytesIO(image_data))
+            text = pytesseract.image_to_string(img)
+            texts.append(text.strip())
+        except UnidentifiedImageError as e:
+            texts.append(f"Error: {str(e)}")
+
+    return render_template('index.html', texts=text)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
