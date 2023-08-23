@@ -9,90 +9,29 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+
+
+
 @app.route('/convert', methods=['POST'])
 def convert_image():
     if 'image' not in request.files:
-        return jsonify({"error": "No image provided"})
+        return render_template('index.html', error='No image provided')
 
     image = request.files['image']
-
+    
     try:
         image_data = image.read()
         img = Image.open(io.BytesIO(image_data))
         text = pytesseract.image_to_string(img)
     except UnidentifiedImageError as e:
-        return jsonify({"error": f"Error: {str(e)}"})
+        return render_template('index.html', error=f"Error: {str(e)}")
 
     if text.strip():
-        return jsonify({"text": text})
+        return render_template('index.html', text=text)
     else:
-        return jsonify({"no_text": True})
+        return render_template('index.html', no_text=True)
+
+
 
 if __name__ == '__main__':
     app.run(debug=False)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# from flask import Flask, render_template, request, jsonify
-# import pytesseract
-# from PIL import Image, UnidentifiedImageError
-# import io
-
-# app = Flask(__name__)
-
-# @app.route('/')
-# def index():
-#     return render_template('index.html')
-
-
-
-
-# @app.route('/convert', methods=['POST'])
-# def convert_image():
-#     if 'image' not in request.files:
-#         return render_template('index.html', error='No image provided')
-
-#     image = request.files['image']
-    
-#     try:
-#         image_data = image.read()
-#         img = Image.open(io.BytesIO(image_data))
-#         text = pytesseract.image_to_string(img)
-#     except UnidentifiedImageError as e:
-#         return render_template('index.html', error=f"Error: {str(e)}")
-
-#     if text.strip():
-#         return render_template('index.html', text=text)
-#     else:
-#         return render_template('index.html', no_text=True)
-
-
-
-# if __name__ == '__main__':
-#     app.run(debug=False)
