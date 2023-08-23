@@ -5,29 +5,32 @@ import io
 
 app = Flask(__name__)
 
-@app.route('/home')
+@app.route('/')
 def index():
     return render_template('index.html')
 
+
+
+py
 @app.route('/convert', methods=['POST'])
-def convert_images():
-    images = request.files.getlist('images')
+def convert_image():
+    if 'image' not in request.files:
+        return render_template('index.html', error='No image provided')
 
-    if not images:
-        return render_template('index.html', error='No images provided')
+    image = request.files['image']
+    
+    try:
+        image_data = image.read()
+        img = Image.open(io.BytesIO(image_data))
+        text = pytesseract.image_to_string(img)
+    except UnidentifiedImageError as e:
+        return render_template('index.html', error=f"Error: {str(e)}")
 
-    texts = []
+    if text.strip():
+        return render_template('index.html', text=text)
+    else:
+        return render_template('index.html', no_text=True)
 
-    for image in images:
-        try:
-            image_data = image.read()
-            img = Image.open(io.BytesIO(image_data))
-            text = pytesseract.image_to_string(img)
-            texts.append(text.strip())
-        except UnidentifiedImageError as e:
-            texts.append(f"Error: {str(e)}")
-
-    return render_template('index.html', texts=text)
 
 
 if __name__ == '__main__':
