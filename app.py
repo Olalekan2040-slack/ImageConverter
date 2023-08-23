@@ -11,7 +11,7 @@ def index():
 
 
 
-py
+
 @app.route('/convert', methods=['POST'])
 def convert_image():
     if 'image' not in request.files:
@@ -34,4 +34,4 @@ def convert_image():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
