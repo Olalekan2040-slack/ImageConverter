@@ -4,7 +4,7 @@ from PIL import Image, UnidentifiedImageError
 import io
 from fpdf import FPDF
 
-app = Flask(__name__)
+app = Flask(__name__, )
 
 @app.route('/')
 def index():
