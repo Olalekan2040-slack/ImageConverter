@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template("home.html")
 
 
 
@@ -15,7 +15,7 @@ def index():
 @app.route('/convert', methods=['POST'])
 def convert_image():
     if 'image' not in request.files:
-        return render_template('index.html', error='No image provided')
+        return render_template('home.html', error='No image provided')
 
     image = request.files['image']
     
@@ -24,12 +24,12 @@ def convert_image():
         img = Image.open(io.BytesIO(image_data))
         text = pytesseract.image_to_string(img)
     except UnidentifiedImageError as e:
-        return render_template('index.html', error=f"Error: {str(e)}")
+        return render_template('home.html', error=f"Error: {str(e)}")
 
     if text.strip():
-        return render_template('index.html', text=text)
+        return render_template('home.html', text=text)
     else:
-        return render_template('index.html', no_text=True)
+        return render_template('home.html', no_text=True)
 
 
 
