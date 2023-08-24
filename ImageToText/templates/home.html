@@ -23,6 +23,7 @@
             <div class="form-content">
                 <div id="dimg" class="drop-zone">
                     <h3>Upload an image here</h3>
+                    <button id="camera-button">Use Camera</button>
                     <input type="file" name="image" accept="image/*" required>
                 </div>
                 <div id="preview"></div>
@@ -30,19 +31,50 @@
                 <button type="submit">Convert</button>
             </div>
         </form>
+        
     </section>
     <div id="result">
         {% if text %}
             <h2>Extracted Text:</h2>
             <pre>{{ text }}</pre>
+            <div class="download-links">
+               <button> <a href="{{ url_for('convert_to_pdf', text=text) }}" target="_blank">Download PDF</a></button>
+                <button></button><a href="{{ url_for('convert_to_word', text=text) }}" target="_blank">Download Word</a></button>
+            </div>
         {% elif error %}
             <h2>Error: {{ error }}</h2>
         {% elif no_text %}
             <h2>No text detected in the image.</h2>
         {% endif %}
     </div>
+</div>
 
 
+<script>
+    document.getElementById("camera-button").addEventListener("click", () => {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    let video = document.createElement("video");
+                    video.srcObject = stream;
+                    video.autoplay = true;
+
+                    video.onloadedmetadata = function (e) {
+                        // Now you can capture video frames and process them as images
+                    };
+                })
+                .catch(function (error) {
+                    console.error("Camera access error:", error);
+                });
+        } else {
+            console.error("getUserMedia not supported");
+        }
+    });
+</script>
+
+
+
+    
     <footer>
         <p>&copy; Q-Tech 2023</p>
     </footer>
