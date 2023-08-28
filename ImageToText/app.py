@@ -10,6 +10,9 @@ app = Flask(__name__, template_folder='templates')
 def index():
     return render_template('home.html')
 
+
+
+
 @app.route('/convert', methods=['POST'])
 def convert_image():
     if 'image' not in request.files:
